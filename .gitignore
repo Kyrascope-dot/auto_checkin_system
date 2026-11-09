@@ -1,7 +1,19 @@
 node_modules/
 dist/
 .vite/
+
+# Backend
+backend/venv/
 backend/data/
 backend/__pycache__/
+**/__pycache__/
 *.pyc
+*.pyo
+*.pt
 .env
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

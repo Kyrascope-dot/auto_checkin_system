@@ -38,7 +38,7 @@ ESSL_PORT = int(os.getenv("ESSL_PORT", "4370"))
 ESSL_DATA_DIR = DATA_DIR / "essl"
 
 # Ensure directories exist
-ESSL_DATA_DIR.mkdir(exist_ok=True)
-DATA_DIR.mkdir(exist_ok=True)
-CHROMA_DIR.mkdir(exist_ok=True)
-ENROLLED_FACES_DIR.mkdir(exist_ok=True)
+ESSL_DATA_DIR.mkdir(parents=True, exist_ok=True)
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+CHROMA_DIR.mkdir(parents=True, exist_ok=True)
+ENROLLED_FACES_DIR.mkdir(parents=True, exist_ok=True)
