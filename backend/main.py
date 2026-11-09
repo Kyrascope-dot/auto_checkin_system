@@ -221,8 +221,6 @@ async def live_detect(image: UploadFile = File(...), mode: str = "checkin"):
                     just_checked_out = True
                 elif checkin_store.has_checked_out_today(best["employee_id"]):
                     already_checked_out = True
-                else:
-                    already_checked_in = True
             else:
                 record = checkin_store.try_checkin(
                     employee_id=best["employee_id"],
@@ -436,8 +434,6 @@ async def camera_live_detect(mode: str = "checkin"):
                     just_checked_out = True
                 elif checkin_store.has_checked_out_today(best["employee_id"]):
                     already_checked_out = True
-                else:
-                    already_checked_in = True
             else:
                 record = checkin_store.try_checkin(
                     employee_id=best["employee_id"],
