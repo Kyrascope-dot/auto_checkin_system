@@ -67,7 +67,11 @@ app.add_middleware(
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     traceback.print_exc()
-    return JSONResponse(status_code=500, content={"detail": str(exc)})
+    origin = request.headers.get("origin", "")
+    headers = {}
+    if origin and ("*" in ALLOWED_ORIGINS or origin in ALLOWED_ORIGINS):
+        headers["access-control-allow-origin"] = "*" if "*" in ALLOWED_ORIGINS else origin
+    return JSONResponse(status_code=500, content={"detail": str(exc)}, headers=headers)
 
 
 # Serve enrolled face thumbnails

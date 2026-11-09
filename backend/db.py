@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import certifi
 import logging
 
 from pymongo import MongoClient
@@ -18,7 +19,7 @@ _db: Database | None = None
 def get_db() -> Database:
     global _client, _db
     if _db is None:
-        _client = MongoClient(MONGODB_URL, serverSelectionTimeoutMS=5000)
+        _client = MongoClient(MONGODB_URL, serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
         _db = _client[MONGODB_DB]
         try:
             _client.admin.command("ping")
