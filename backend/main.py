@@ -53,9 +53,10 @@ async def lifespan(app):
 
 app = FastAPI(title="Auto Check-In — Face Recognition API", lifespan=lifespan)
 
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )

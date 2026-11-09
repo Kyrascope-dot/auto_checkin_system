@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 
+const API = (import.meta.env.VITE_API_URL || "") + "/api";
+
 const DETECT_INTERVAL_MS = 1500;
 const VOICE_COOLDOWN_MS = 30_000;
 const UNKNOWN_ANNOUNCE_THRESHOLD = 3;
@@ -118,7 +120,7 @@ export default function LivePage() {
   useEffect(() => { sessionModeRef.current = sessionMode; }, [sessionMode]);
 
   useEffect(() => {
-    axios.get("/api/camera/status").then((r) => setExtStatus(r.data)).catch(() => {});
+    axios.get(`${API}/camera/status`).then((r) => setExtStatus(r.data)).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -184,7 +186,7 @@ export default function LivePage() {
 
       if (source === "external") {
         res = await axios.post(
-          isActive ? `/api/camera/live-detect?mode=${mode}` : "/api/camera/detect",
+          isActive ? `${API}/camera/live-detect?mode=${mode}` : `${API}/camera/detect`,
         );
       } else {
         if (!videoRef.current || !canvasRef.current) return;
@@ -198,7 +200,7 @@ export default function LivePage() {
         const form = new FormData();
         form.append("image", blob, "frame.jpg");
         res = await axios.post(
-          isActive ? `/api/live-detect?mode=${mode}` : "/api/detect",
+          isActive ? `${API}/live-detect?mode=${mode}` : `${API}/detect`,
           form,
         );
       }
@@ -256,8 +258,8 @@ export default function LivePage() {
       if (wasMode === "checkin") {
         try {
           const [empRes, ciRes] = await Promise.all([
-            axios.get("/api/employees"),
-            axios.get("/api/checkins/today"),
+            axios.get(`${API}/employees`),
+            axios.get(`${API}/checkins/today`),
           ]);
           const done = new Set(ciRes.data.checkins.map((c) => c.internal_id));
           const missed = empRes.data.employees.filter((e) => !done.has(e.id));
@@ -289,7 +291,7 @@ export default function LivePage() {
   }, [checkinActive, checkinEndTime]);
 
   const loadCheckins = useCallback(async () => {
-    try { setTodayCheckins((await axios.get("/api/checkins/today")).data.checkins); } catch {}
+    try { setTodayCheckins((await axios.get(`${API}/checkins/today`)).data.checkins); } catch {}
   }, []);
   useEffect(() => { loadCheckins(); }, [loadCheckins]);
 
