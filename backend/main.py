@@ -5,9 +5,11 @@ import shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+import traceback
+
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 import checkin_store
@@ -60,6 +62,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    traceback.print_exc()
+    return JSONResponse(status_code=500, content={"detail": str(exc)})
+
 
 # Serve enrolled face thumbnails
 app.mount(
